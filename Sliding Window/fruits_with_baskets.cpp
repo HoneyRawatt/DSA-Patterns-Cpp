@@ -5,9 +5,56 @@
 #include <set>
 using namespace std;
 
-// ---------------- BRUTE FORCE ----------------
-// Time: O(n^2), Space: O(1) ignoring set size
-// Try every subarray and check if it has at most 2 types
+/*
+========================================================
+PROBLEM STATEMENT:
+--------------------------------------------------------
+You are given an integer array `fruits` where each
+element represents a type of fruit.
+
+You have two baskets, and each basket can hold only
+one type of fruit, but unlimited quantity.
+
+Rules:
+- You must pick fruits from a contiguous subarray.
+- You can store at most 2 different fruit types.
+
+Goal:
+- Return the maximum number of fruits you can collect.
+
+--------------------------------------------------------
+EXAMPLE:
+Input:  fruits = [1, 2, 1, 2, 3, 2, 2, 1]
+Output: 4
+Explanation: The longest subarray is [1,2,1,2]
+
+========================================================
+*/
+
+
+    /*
+    ========================================================
+    BRUTE FORCE APPROACH:
+    --------------------------------------------------------
+    Idea:
+    - Try every possible subarray
+    - Use a set to track distinct fruit types
+    - If types ≤ 2, update answer
+
+    --------------------------------------------------------
+    INTUITION:
+    --------------------------------------------------------
+    Generate all subarrays and stop expanding when more
+    than 2 fruit types appear.
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(n²)
+
+    SPACE COMPLEXITY:
+    - O(1) (at most 3 elements in set)
+    ========================================================
+    */
 int totalFruits_brute(vector<int>& arr) {
     int maxlen = 0;
     for (int i = 0; i < arr.size(); i++) {
@@ -22,9 +69,29 @@ int totalFruits_brute(vector<int>& arr) {
     return maxlen;
 }
 
-// ---------------- BETTER ----------------
-// Time: O(2n), Space: O(n) for hashmap
-// Sliding window with map to count fruits
+    /*
+    ========================================================
+    BETTER APPROACH (SLIDING WINDOW + HASHMAP):
+    --------------------------------------------------------
+    Idea:
+    - Use two pointers (left & right)
+    - Store fruit counts in a hashmap
+    - Shrink window when distinct fruits exceed 2
+
+    --------------------------------------------------------
+    INTUITION:
+    --------------------------------------------------------
+    Maintain a window with at most 2 fruit types.
+    Expand right, shrink left only when constraint breaks.
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(2n) ≈ O(n)
+
+    SPACE COMPLEXITY:
+    - O(n)
+    ========================================================
+    */
 int totalFruit_better(vector<int>& fruits) {
     int l = 0, r = 0, maxlen = 0;
     unordered_map<int, int> mpp;
@@ -51,9 +118,27 @@ int totalFruit_better(vector<int>& fruits) {
     return maxlen;
 }
 
-// ---------------- OPTIMAL ----------------
-// Time: O(n), Space: O(n)
-// Same as better but cleaner window shrink
+    /*
+    ========================================================
+    OPTIMAL APPROACH (CLEAN SLIDING WINDOW):
+    --------------------------------------------------------
+    Same logic as above but with a cleaner shrinking step.
+
+    --------------------------------------------------------
+    INTUITION:
+    --------------------------------------------------------
+    - Expand window using right pointer
+    - Shrink only once per iteration when needed
+    - Window always remains valid
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(n)
+
+    SPACE COMPLEXITY:
+    - O(n)
+    ========================================================
+    */
 int totalFruit_optimal(vector<int>& fruits) {
     int l = 0, r = 0, maxlen = 0;
     unordered_map<int, int> mpp;

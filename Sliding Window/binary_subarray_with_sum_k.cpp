@@ -1,6 +1,32 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+/*
+Problem Statement
+
+Given a binary array nums (containing only 0s and 1s) and an integer k, count the number of contiguous subarrays that contain exactly k ones.
+
+Example
+Input: nums = [1,0,1,0,1], k = 2
+Output: 4
+Explanation: Subarrays with exactly 2 ones:
+[1,0,1], [1,0,1,0], [0,1,0,1], [1,0,1]
+
+Key Idea
+
+Count subarrays with at most k ones → atMost(k)
+
+Count subarrays with at most k-1 ones → atMost(k-1)
+
+Subarrays with exactly k ones = atMost(k) - atMost(k-1)
+
+Intuition (Sliding Window)
+
+Keep a window [l, r] with at most goal ones.
+
+For each r, number of valid subarrays ending at r = r - l + 1.
+
+Sliding window moves l forward when sum > goal. */
 
 // --------------------------------------------
 // Binary Subarrays With Sum

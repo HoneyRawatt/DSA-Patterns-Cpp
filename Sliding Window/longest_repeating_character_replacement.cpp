@@ -3,6 +3,30 @@
 #include <unordered_map>
 #include <algorithm>
 using namespace std;
+/*
+========================================================
+PROBLEM STATEMENT:
+--------------------------------------------------------
+You are given a string `s` consisting of uppercase
+English letters and an integer `k`.
+
+You can replace at most `k` characters in the string
+with any other character.
+
+Goal:
+- Find the length of the longest substring that can be
+  obtained after performing at most `k` replacements
+  such that all characters in the substring are the same.
+
+--------------------------------------------------------
+EXAMPLE:
+Input:  s = "AABABBA", k = 1
+Output: 4
+Explanation:
+Replace one 'B' with 'A' → "AAAA"
+
+========================================================
+*/
 
 // --------------------------------------------
 // BRUTE FORCE

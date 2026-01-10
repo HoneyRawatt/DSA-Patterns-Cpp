@@ -2,6 +2,39 @@
 using namespace std;
 
 /*
+Problem Statement
+
+Minimum Window Substring:
+
+Given strings s and t, find the smallest substring in s that contains all characters of t (including duplicates).
+
+If no such window exists, return "".
+
+Order of characters does not matter.
+
+Example:
+
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+
+Intuition
+
+Maintain a sliding window [l, r] over s.
+
+Keep a frequency map of characters in t.
+
+Expand r to include characters in the window and update counts.
+
+When all characters of t are included (count == t.size()), try shrinking from left to minimize window length.
+
+Repeat until the end of s.
+
+Complexity Analysis
+Approach	Time Complexity	Space Complexity
+Brute Force	O(n²)	O(1) (hash[256])
+Optimized Sliding Window	O(n)	O(256) ≈ O(1)
+*/
+/*
     Function: minWindow_optimized
     Purpose: Find the smallest window in `s` that contains all characters of `t`
     Approach: Sliding window with character frequency tracking

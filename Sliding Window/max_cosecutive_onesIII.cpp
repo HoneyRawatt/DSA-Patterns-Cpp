@@ -2,10 +2,50 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
+/*
+========================================================
+PROBLEM STATEMENT:
+--------------------------------------------------------
+You are given a binary array `nums` (containing only
+0s and 1s) and an integer `k`.
 
-// ---------------- BRUTE FORCE ----------------
-// Time: O(n^2)
-// For each subarray, count number of zeros and check if ≤ k
+You are allowed to flip at most `k` zeros to 1s.
+
+Goal:
+- Find the length of the longest subarray containing
+  only 1s after performing at most `k` flips.
+
+--------------------------------------------------------
+EXAMPLE:
+Input:  nums = [1,1,0,0,1,1,1,0,1], k = 2
+Output: 7
+
+========================================================
+*/
+
+    /*
+    ========================================================
+    BRUTE FORCE APPROACH:
+    --------------------------------------------------------
+    Idea:
+    - Consider every subarray
+    - Count number of zeros
+    - If zeros ≤ k, update answer
+
+    --------------------------------------------------------
+    INTUITION:
+    --------------------------------------------------------
+    Check all possible windows and validate whether they
+    satisfy the constraint (zeros ≤ k).
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(n²)
+
+    SPACE COMPLEXITY:
+    - O(1)
+    ========================================================
+    */
 int longestOnes_brute(vector<int> &nums, int k) {
     int n = nums.size();
     int maxlen = 0;
@@ -24,9 +64,29 @@ int longestOnes_brute(vector<int> &nums, int k) {
     return maxlen;
 }
 
-// ---------------- BETTER: Sliding Window ----------------
-// Time: O(2n)
-// Shrink window from left when zeros exceed k
+    /*
+    ========================================================
+    BETTER APPROACH (SLIDING WINDOW):
+    --------------------------------------------------------
+    Idea:
+    - Use two pointers (left & right)
+    - Expand window by moving right
+    - Shrink window from left when zeros exceed k
+
+    --------------------------------------------------------
+    INTUITION:
+    --------------------------------------------------------
+    We maintain a window where zeros ≤ k.
+    If constraint breaks, move left pointer.
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(2n) ≈ O(n)
+
+    SPACE COMPLEXITY:
+    - O(1)
+    ========================================================
+    */
 int longestOnes_better(vector<int> &nums, int k) {
     int maxlen = 0, l = 0, r = 0, zeros = 0;
 
@@ -46,9 +106,27 @@ int longestOnes_better(vector<int> &nums, int k) {
     return maxlen;
 }
 
-// ---------------- OPTIMAL: Cleaner Version ----------------
-// Time: O(n)
-// Same logic, just more concise
+    /*
+    ========================================================
+    OPTIMAL APPROACH (CLEAN SLIDING WINDOW):
+    --------------------------------------------------------
+    Same logic as above, written more concisely.
+
+    --------------------------------------------------------
+    INTUITION:
+    --------------------------------------------------------
+    - Always expand right
+    - Shrink left only when zeros exceed k
+    - Update answer whenever window is valid
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(n)
+
+    SPACE COMPLEXITY:
+    - O(1)
+    ========================================================
+    */
 int longestOnes_optimal(vector<int> &nums, int k) {
     int n = nums.size();
     int l = 0, r = 0, maxlen = 0, zeros = 0;

@@ -3,13 +3,49 @@
 #include <unordered_map>
 using namespace std;
 
-// --------------------------------------------
-// Count subarrays with at most k distinct integers
-// Time: O(n), Space: O(k)
-// Remember:
-// - Sliding window
-// - Expand r, shrink l when distinct count > k
-// - Add (r - l + 1) subarrays for each r
+/*
+========================================================
+PROBLEM STATEMENT:
+--------------------------------------------------------
+Given an integer array nums and an integer k, return
+the number of contiguous subarrays that contain exactly
+k distinct integers.
+
+Example:
+Input: nums = [1,2,1,2,3], k = 2
+Output: 7
+Explanation: Subarrays with exactly 2 distinct integers:
+[1,2], [2,1], [1,2], [2,1,2], [1,2,1], [2,3], [1,2]
+
+========================================================
+INTUITION:
+--------------------------------------------------------
+1. "Exactly k distinct integers" can be computed as:
+   exactly_k = atMost(k) - atMost(k - 1)
+
+2. Use sliding window for atMost:
+   - Maintain a window [l, r] with at most 'goal' distinct elements.
+   - Expand r, shrink l when distinct count > goal.
+   - For each r, number of valid subarrays ending at r = r - l + 1.
+
+3. This avoids checking all subarrays explicitly (O(n^2)).
+
+========================================================
+TIME AND SPACE COMPLEXITY:
+--------------------------------------------------------
+Brute Force:
+- Time: O(n^2)
+- Space: O(k) (hashmap for counting elements)
+
+Optimal (Sliding Window):
+- Time: O(n)
+- Space: O(k)
+========================================================
+*/
+// -----------------------------------------------------
+// Helper function: Count subarrays with at most 'goal' distinct numbers
+// Time: O(n)
+// Space: O(k)
 int noofsubarrays(vector<int>& nums, int k) {
     int l = 0, r = 0, cnt = 0;
     unordered_map<int, int> mpp;
@@ -30,9 +66,10 @@ int noofsubarrays(vector<int>& nums, int k) {
     return cnt;
 }
 
-// --------------------------------------------
-// Optimal: Exactly k distinct = atMost(k) - atMost(k-1)
-// Time: O(n), Space: O(k)
+// -----------------------------------------------------
+// Optimal function: Subarrays with exactly k distinct integers
+// Time: O(n)
+// Space: O(k)
 int subarraysWithKDistinct_optimal(vector<int>& nums, int k) {
     return noofsubarrays(nums, k) - noofsubarrays(nums, k - 1);
 }

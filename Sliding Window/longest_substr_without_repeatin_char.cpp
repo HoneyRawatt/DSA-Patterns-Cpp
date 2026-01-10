@@ -2,7 +2,48 @@
 #include <string>
 #include <algorithm>
 using namespace std;
+/*
+========================================================
+PROBLEM STATEMENT:
+--------------------------------------------------------
+Given a string `s`, find the length of the longest
+substring without repeating characters.
 
+A substring is a contiguous part of the string.
+
+--------------------------------------------------------
+EXAMPLE:
+Input:  "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with length 3.
+
+========================================================
+*/
+
+/*
+========================================================
+BRUTE FORCE APPROACH:
+--------------------------------------------------------
+Idea:
+- Try every possible starting index `i`
+- Expand the substring until a duplicate character
+  is found
+- Track the maximum length
+
+--------------------------------------------------------
+INTUITION:
+--------------------------------------------------------
+For each index, keep adding characters while all are
+unique. Stop as soon as a duplicate appears.
+
+--------------------------------------------------------
+TIME COMPLEXITY:
+- O(n²)
+
+SPACE COMPLEXITY:
+- O(1) (fixed size array of 256 characters)
+========================================================
+*/
 // ✅ Brute-force O(n^2) version
 int lengthoflongestsubstr_brute(string s)
 {
@@ -24,7 +65,33 @@ int lengthoflongestsubstr_brute(string s)
     }
     return maxlen;
 }
-// ✅ Optimized sliding window O(n) version
+    /*
+    ========================================================
+    OPTIMIZED APPROACH (SLIDING WINDOW):
+    --------------------------------------------------------
+
+    INTUITION:
+    --------------------------------------------------------
+    - Use two pointers (left & right) to maintain a window
+    - Expand the window by moving `right`
+    - If a duplicate is found:
+        Move `left` just after the previous occurrence
+    - Always maintain a window with unique characters
+
+    --------------------------------------------------------
+    KEY IDEA:
+    --------------------------------------------------------
+    Store the last seen index of every character.
+    This allows us to jump the left pointer directly.
+
+    --------------------------------------------------------
+    TIME COMPLEXITY:
+    - O(n)
+
+    SPACE COMPLEXITY:
+    - O(1) (array of size 256)
+    ========================================================
+    */
 int lengthOfLongestSubstring(string s)
 {
     int hash[256];
