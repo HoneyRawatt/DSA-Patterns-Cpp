@@ -2,16 +2,35 @@
 #include<vector>
 using namespace std;
 
+/*
+====================================
+Doubly Linked List Node
+====================================
+Intuition:
+- Each node stores:
+  1) data
+  2) pointer to previous node
+  3) pointer to next node
+- Allows traversal in both directions
+
+Time Complexity:
+- Node creation: O(1)
+
+Space Complexity:
+- O(1) per node
+*/
 class node {
 public:
     int data;
     node* prev;
     node* next;
+
     node(int val, node* next, node* prev) {
         data = val;
         this->prev = prev;
         this->next = next;
     }
+
     node(int val) {
         data = val;
         next = nullptr;
@@ -19,10 +38,25 @@ public:
     }
 };
 
-// Convert array to doubly linked list
+/*
+====================================
+Convert Array to Doubly Linked List
+====================================
+Intuition:
+- First element becomes head
+- Maintain a `prev` pointer to link nodes both ways
+- Traverse array once
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(n) (for n nodes)
+*/
 node* convertArr(vector<int> arr) {
     node* head = new node(arr[0]);
     node* prev = head;
+
     for (int i = 1; i < arr.size(); i++) {
         node* temp = new node(arr[i]);
         prev->next = temp;
@@ -32,7 +66,21 @@ node* convertArr(vector<int> arr) {
     return head;
 }
 
-// Delete head node
+/*
+====================================
+Delete Head Node
+====================================
+Intuition:
+- Move head to next node
+- Set new head's prev to NULL
+- Delete old head
+
+Time Complexity:
+- O(1)
+
+Space Complexity:
+- O(1)
+*/
 node* deletehead(node* head) {
     if (head == nullptr) return nullptr;
 
@@ -46,7 +94,20 @@ node* deletehead(node* head) {
     return head;
 }
 
-// Delete tail node
+/*
+====================================
+Delete Tail Node
+====================================
+Intuition:
+- Traverse till last node
+- Use prev pointer to unlink tail
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 node* deletetail(node* head) {
     if (head == nullptr) return nullptr;
     if (head->next == nullptr) {
@@ -65,7 +126,24 @@ node* deletetail(node* head) {
     return head;
 }
 
-// Delete given node pointer
+/*
+====================================
+Delete Given Node (by pointer)
+====================================
+Intuition:
+- Handle 4 cases:
+  1) Only one node
+  2) Head node
+  3) Tail node
+  4) Middle node
+- Adjust prev & next pointers accordingly
+
+Time Complexity:
+- O(1)
+
+Space Complexity:
+- O(1)
+*/
 node* deltetenode(node* head, node* temp) {
     if (temp == nullptr) return head;
 
@@ -99,7 +177,20 @@ node* deltetenode(node* head, node* temp) {
     return head;
 }
 
-// Delete kth node (1-based index)
+/*
+====================================
+Delete Kth Node (1-based index)
+====================================
+Intuition:
+- Traverse till kth node
+- Reuse delete-by-pointer logic
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 node* delete_kth_node(node* head, int k) {
     if (head == nullptr) return nullptr;
 
@@ -114,7 +205,20 @@ node* delete_kth_node(node* head, int k) {
     return deltetenode(head, temp);
 }
 
-// Insert at head
+/*
+====================================
+Insert at Head
+====================================
+Intuition:
+- New node becomes head
+- Old head's prev points to new node
+
+Time Complexity:
+- O(1)
+
+Space Complexity:
+- O(1)
+*/
 node* insertHead(node* head, int val) {
     node* newNode = new node(val);
     if (head == nullptr) return newNode;
@@ -124,7 +228,20 @@ node* insertHead(node* head, int val) {
     return newNode;
 }
 
-// Insert at tail
+/*
+====================================
+Insert at Tail
+====================================
+Intuition:
+- Traverse to last node
+- Link new node using prev pointer
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 node* insertTail(node* head, int val) {
     node* newNode = new node(val);
     if (head == nullptr) return newNode;
@@ -137,7 +254,20 @@ node* insertTail(node* head, int val) {
     return head;
 }
 
-// Insert at kth position (1-based index)
+/*
+====================================
+Insert at Kth Position (1-based)
+====================================
+Intuition:
+- Traverse to (k-1)th node
+- Adjust prev and next pointers
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 node* insertAtK(node* head, int k, int val) {
     if (k <= 1) return insertHead(head, val);
 
@@ -163,7 +293,20 @@ node* insertAtK(node* head, int k, int val) {
     return head;
 }
 
-// Insert before a given node
+/*
+====================================
+Insert Before Given Node
+====================================
+Intuition:
+- If node is head → insert at head
+- Else link between prev and current
+
+Time Complexity:
+- O(1)
+
+Space Complexity:
+- O(1)
+*/
 node* insertBefore(node* head, node* temp, int val) {
     if (temp == nullptr) return head;
 
@@ -176,14 +319,25 @@ node* insertBefore(node* head, node* temp, int val) {
 
     prev->next = newNode;
     newNode->prev = prev;
-
     newNode->next = temp;
     temp->prev = newNode;
 
     return head;
 }
 
-// Insert after a given node
+/*
+====================================
+Insert After Given Node
+====================================
+Intuition:
+- Insert node between temp and temp->next
+
+Time Complexity:
+- O(1)
+
+Space Complexity:
+- O(1)
+*/
 node* insertAfter(node* head, node* temp, int val) {
     if (temp == nullptr) return head;
 
@@ -199,18 +353,39 @@ node* insertAfter(node* head, node* temp, int val) {
     return head;
 }
 
-// Print list forward
+/*
+====================================
+Print Doubly Linked List (Forward)
+====================================
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 void print(node* head) {
     node* temp = head;
     while (temp != nullptr) {
         cout << temp->data << " ";
-        if (temp->next == nullptr) break; // stop at tail
         temp = temp->next;
     }
     cout << endl;
 }
 
-// Print list in reverse (from tail)
+/*
+====================================
+Print Doubly Linked List (Reverse)
+====================================
+Intuition:
+- Move to tail
+- Traverse using prev pointer
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 void printReverse(node* head) {
     if (head == nullptr) return;
 
@@ -224,6 +399,21 @@ void printReverse(node* head) {
     cout << endl;
 }
 
+/*
+====================================
+Reverse Doubly Linked List
+====================================
+Intuition:
+- Swap prev and next for each node
+- Move using swapped pointers
+- Last processed node becomes new head
+
+Time Complexity:
+- O(n)
+
+Space Complexity:
+- O(1)
+*/
 node* reverse(node* head) {
     if (head == nullptr || head->next == nullptr) return head;
 
@@ -231,19 +421,23 @@ node* reverse(node* head) {
     node* last = nullptr;
 
     while (curr != nullptr) {
-        last = curr->prev;        // store prev
-        curr->prev = curr->next;  // swap
+        last = curr->prev;
+        curr->prev = curr->next;
         curr->next = last;
-        curr = curr->prev;        // move to next node (which is prev now)
+        curr = curr->prev;
     }
 
-    // last now points to the old head’s prev (i.e., new head)
     if (last != nullptr) {
         head = last->prev;
     }
     return head;
 }
 
+/*
+====================================
+Main Function (Testing)
+====================================
+*/
 int main() {
     vector<int> arr = {12, 2, 3, 4, 6};
     node* head = convertArr(arr);
@@ -263,7 +457,6 @@ int main() {
     cout << "After deleting 2nd node: ";
     print(head);
 
-    // --- Now test insertions ---
     head = insertHead(head, 99);
     cout << "After inserting 99 at head: ";
     print(head);
@@ -276,20 +469,20 @@ int main() {
     cout << "After inserting 55 at pos 2: ";
     print(head);
 
-    head = insertBefore(head, head->next, 44); // before 2nd node
+    head = insertBefore(head, head->next, 44);
     cout << "After inserting 44 before 2nd node: ";
     print(head);
 
-    head = insertAfter(head, head->next, 11); // after 2nd node
+    head = insertAfter(head, head->next, 11);
     cout << "After inserting 11 after 2nd node: ";
     print(head);
 
-    cout << "List in reverse: ";
+    cout << "List in reverse order: ";
     printReverse(head);
 
-    cout << "List in reverse: ";
-    Reverse(head);
-    
+    head = reverse(head);
+    cout << "List after reversing: ";
+    print(head);
 
     return 0;
 }

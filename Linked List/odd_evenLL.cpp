@@ -16,7 +16,18 @@ public:
     }
 };
 
-// Brute Force: Store odd nodes first, then even nodes
+    /*
+    ====================================
+    Brute Force Approach
+    ====================================
+    Intuition:
+    - Store odd-position nodes first
+    - Then store even-position nodes
+    - Rewrite the linked list using stored values
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    */
 node* Odd_evenLL_brute(node* head) {
     if (head == nullptr || head->next == nullptr) return head;
     vector<int> arr;
@@ -50,7 +61,18 @@ node* Odd_evenLL_brute(node* head) {
     return head;
 }
 
-// Optimized: Rearrange pointers directly
+    /*
+    ====================================
+    Optimized Approach (Pointer Rearrangement)
+    ====================================
+    Intuition:
+    - Separate odd and even nodes using pointers
+    - Connect odd list with even list at the end
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    */
+
 node* Odd_evenLL_optimized(node* head) {
     if (head == nullptr || head->next == nullptr) return head;
     

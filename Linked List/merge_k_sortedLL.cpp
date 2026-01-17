@@ -4,25 +4,51 @@
 #include <queue>
 using namespace std;
 
+/*
+=========================================
+PROBLEM STATEMENT
+=========================================
+You are given K sorted singly linked lists.
+Each linked list is sorted in ascending order.
+
+Your task is to merge all these K sorted
+linked lists into one single sorted
+linked list and return its head.
+
+This is a classic problem often asked in
+interviews (LeetCode: Merge K Sorted Lists).
+=========================================
+*/
+
+// Definition of a singly linked list node
 class node {
 public:
     int data;
     node* next;
+
     node(int val) {
         data = val;
         next = nullptr;
     }
+
     node(int val, node* next) {
         data = val;
         this->next = next; 
     }
 };
 
-// Helper: convert array to linked list
+/*
+-------------------------------------------------
+Helper Function:
+Convert a sorted array into a linked list
+-------------------------------------------------
+*/
 node* convertArrToList(vector<int>& arr) {
     if (arr.empty()) return nullptr;
+
     node* head = new node(arr[0]);
     node* temp = head;
+
     for (int i = 1; i < arr.size(); i++) {
         temp->next = new node(arr[i]);
         temp = temp->next;
@@ -30,9 +56,36 @@ node* convertArrToList(vector<int>& arr) {
     return head;
 }
 
-// Brute-force: put all elements in array, sort, then convert to list
+/*
+=================================================
+APPROACH 1: BRUTE FORCE
+=================================================
+INTUITION:
+- Traverse all K linked lists
+- Store every element into a single array
+- Sort the array
+- Convert the sorted array back into a linked list
+
+WHY IT WORKS:
+- Sorting puts elements in correct order
+- Linked list is rebuilt from sorted data
+
+TIME COMPLEXITY:
+- Let total nodes = N
+- Collect elements: O(N)
+- Sorting: O(N log N)
+- Building list: O(N)
+=> Overall: O(N log N)
+
+SPACE COMPLEXITY:
+- Extra array of size N
+=> O(N)
+=================================================
+*/
 node* merge_k_sorted_ll_brute(vector<node*> lists) {
     vector<int> arr;
+
+    // Collect all elements from all lists
     for (int i = 0; i < lists.size(); i++) {
         node* temp = lists[i];
         while (temp != nullptr) {
@@ -40,15 +93,26 @@ node* merge_k_sorted_ll_brute(vector<node*> lists) {
             temp = temp->next;
         }
     }
+
+    // Sort the collected elements
     sort(arr.begin(), arr.end());
+
+    // Convert sorted array to linked list
     return convertArrToList(arr);
 }
 
-// Merge two sorted lists
+/*
+-------------------------------------------------
+Helper:
+Merge two sorted linked lists
+(Same logic as merge step of Merge Sort)
+-------------------------------------------------
+*/
 node* merge_two_sorted_ll(node* head1, node* head2) {
     node* t1 = head1;
     node* t2 = head2;
 
+    // Dummy node to simplify pointer handling
     node* dnode = new node(-1);
     node* temp = dnode;
 
@@ -64,15 +128,39 @@ node* merge_two_sorted_ll(node* head1, node* head2) {
         }
     }
 
+    // Attach remaining nodes
     if (t1) temp->next = t1;
     else temp->next = t2;
 
     return dnode->next;
 }
 
-// Better: merge lists one by one using merge_two_sorted_ll
+/*
+=================================================
+APPROACH 2: BETTER (ITERATIVE MERGING)
+=================================================
+INTUITION:
+- Merge lists one by one
+- First merge list[0] and list[1]
+- Then merge the result with list[2], and so on
+
+WHY BETTER THAN BRUTE:
+- No extra array
+- Directly merges linked lists
+
+TIME COMPLEXITY:
+- Each merge takes O(N)
+- Performed K times
+=> O(N * K) in worst case
+
+SPACE COMPLEXITY:
+- Only pointers used
+=> O(1) auxiliary space
+=================================================
+*/
 node* merge_k_sorted_ll_better(vector<node*> lists) {
     if (lists.empty()) return nullptr;
+
     node* head = lists[0];
     for (int i = 1; i < lists.size(); i++) {
         head = merge_two_sorted_ll(head, lists[i]);
@@ -80,34 +168,70 @@ node* merge_k_sorted_ll_better(vector<node*> lists) {
     return head;
 }
 
-// Optimal: using min-heap
+/*
+=================================================
+APPROACH 3: OPTIMAL (MIN HEAP / PRIORITY QUEUE)
+=================================================
+INTUITION:
+- At any time, we only need the smallest
+  element among the K lists
+- Use a min-heap to always extract the
+  smallest node
+- Push the next node of the extracted list
+  into the heap
+
+WHY OPTIMAL:
+- Heap size never exceeds K
+- Each node is pushed and popped exactly once
+
+TIME COMPLEXITY:
+- N total nodes
+- Heap operations take O(log K)
+=> O(N log K)
+
+SPACE COMPLEXITY:
+- Heap stores at most K elements
+=> O(K)
+=================================================
+*/
 node* merge_k_sorted_ll(vector<node*> lists) {
     priority_queue<
-    pair<int, node*>,               // type of elements
-    vector<pair<int, node*>>,       // underlying container
-    greater<pair<int, node*>>       // comparator
-> pq;
+        pair<int, node*>,               // {value, node}
+        vector<pair<int, node*>>,
+        greater<pair<int, node*>>
+    > pq;
 
-
+    // Push first node of each list into heap
     for (int i = 0; i < lists.size(); i++) {
-        if (lists[i]) pq.push({lists[i]->data, lists[i]});
+        if (lists[i]) {
+            pq.push({lists[i]->data, lists[i]});
+        }
     }
 
     node* dummynode = new node(-1);
     node* temp = dummynode;
 
+    // Extract minimum and push next element
     while (!pq.empty()) {
         auto it = pq.top();
         pq.pop();
-        if (it.second->next) pq.push({it.second->next->data, it.second->next});
+
         temp->next = it.second;
         temp = temp->next;
+
+        if (it.second->next) {
+            pq.push({it.second->next->data, it.second->next});
+        }
     }
 
     return dummynode->next;
 }
 
-// Helper: print list
+/*
+-------------------------------------------------
+Helper: Print linked list
+-------------------------------------------------
+*/
 void printList(node* head) {
     while (head) {
         cout << head->data << " ";
@@ -116,12 +240,18 @@ void printList(node* head) {
     cout << endl;
 }
 
-// Helper: insert at end
+/*
+-------------------------------------------------
+Helper: Insert node at the end
+-------------------------------------------------
+*/
 node* insertEnd(node* head, int val) {
     if (!head) return new node(val);
+
     node* temp = head;
     while (temp->next) temp = temp->next;
     temp->next = new node(val);
+
     return head;
 }
 
@@ -144,16 +274,13 @@ int main() {
     lists[2] = insertEnd(lists[2], 9);
 
     cout << "Brute Force Merge: ";
-    node* merged_brute = merge_k_sorted_ll_brute(lists);
-    printList(merged_brute);
+    printList(merge_k_sorted_ll_brute(lists));
 
     cout << "Better Merge: ";
-    node* merged_better = merge_k_sorted_ll_better(lists);
-    printList(merged_better);
+    printList(merge_k_sorted_ll_better(lists));
 
     cout << "Optimal Merge (Heap): ";
-    node* merged_optimal = merge_k_sorted_ll(lists);
-    printList(merged_optimal);
+    printList(merge_k_sorted_ll(lists));
 
     return 0;
 }

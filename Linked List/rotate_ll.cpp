@@ -1,21 +1,43 @@
 #include <iostream>
 using namespace std;
 
+/*
+====================================================
+PROBLEM STATEMENT:
+----------------------------------------------------
+Given the head of a singly linked list and an integer k,
+rotate the linked list to the right by k positions.
+
+Example:
+Input : 1 -> 2 -> 3 -> 4 -> 5 , k = 2
+Output: 4 -> 5 -> 1 -> 2 -> 3
+====================================================
+*/
+
+// Definition of singly linked list node
 class node {
 public:
     int data;
     node* next;
+
     node(int val) {
         data = val;
         next = nullptr;
     }
+
     node(int val, node* next) {
         data = val;
-        this->next = next; 
+        this->next = next;
     }
 };
 
-// Utility to print the linked list
+/*
+====================================================
+UTILITY FUNCTION:
+----------------------------------------------------
+Prints the linked list.
+====================================================
+*/
 void printList(node* head) {
     while (head != nullptr) {
         cout << head->data << " ";
@@ -24,21 +46,45 @@ void printList(node* head) {
     cout << endl;
 }
 
-// Find the k-th node (1-based indexing)
+/*
+====================================================
+HELPER FUNCTION:
+----------------------------------------------------
+Finds and returns the k-th node (1-based indexing)
+from the given node.
+====================================================
+*/
 node* findNthnode(node* temp, int k) {
     int cnt = 1;
     while (temp != nullptr) {
-        if (k == cnt) return temp;
+        if (cnt == k) return temp;
         cnt++;
         temp = temp->next;
     }
     return temp;
 }
 
-// Rotate list by k positions
-node* rotate_k(node* head, int k) {
-    if (head == nullptr || head->next == nullptr || k == 0) return head;
+/*
+====================================================
+MAIN FUNCTION:
+----------------------------------------------------
+INTUITION:
+1. Find the length of the linked list.
+2. Reduce k using k = k % length.
+3. Make the linked list circular by connecting
+   the last node to the head.
+4. Find the new last node at position (length - k).
+5. Break the circular link to get the rotated list.
+====================================================
+*/
 
+node* rotate_k(node* head, int k) {
+
+    // Edge cases
+    if (head == nullptr || head->next == nullptr || k == 0)
+        return head;
+
+    // Find length and tail
     int len = 1;
     node* tail = head;
     while (tail->next != nullptr) {
@@ -46,20 +92,46 @@ node* rotate_k(node* head, int k) {
         tail = tail->next;
     }
 
-    if (k % len == 0) return head; // no rotation
+    // If rotation is multiple of length, list remains same
+    if (k % len == 0)
+        return head;
 
     k = k % len;
-    tail->next = head; // make it circular
 
-    node* newlastnode = findNthnode(head, len - k);
-    head = newlastnode->next;
-    newlastnode->next = nullptr; // break the circle
+    // Make list circular
+    tail->next = head;
+
+    // Find new last node
+    node* newLastNode = findNthnode(head, len - k);
+
+    // Update head and break the circle
+    head = newLastNode->next;
+    newLastNode->next = nullptr;
 
     return head;
 }
 
+/*
+====================================================
+TIME COMPLEXITY:
+----------------------------------------------------
+O(N)
+- Traversing list to find length and rotation point.
+
+SPACE COMPLEXITY:
+----------------------------------------------------
+O(1)
+- No extra space used.
+====================================================
+*/
+
 int main() {
-    // Build linked list: 1 -> 2 -> 3 -> 4 -> 5
+
+    /*
+    Creating linked list:
+    1 -> 2 -> 3 -> 4 -> 5
+    */
+
     node* head = new node(1);
     head->next = new node(2);
     head->next->next = new node(3);
